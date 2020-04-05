@@ -21,7 +21,13 @@ const WrapBooks = (props) => {
   if (books.length === 0) {
     return <p>`"${shelf}" books not found. Click plus button to add some!`</p>;
   }
-  return <ListBooks books={books} />;
+  return (
+    <ListBooks
+      books={books}
+      shelfBooks={props.shelfBooks}
+      updateBook={props.updateBook}
+    />
+  );
 };
 
 export default WrapBooks;
