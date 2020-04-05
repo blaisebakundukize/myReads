@@ -7,6 +7,7 @@ import { shelfTypes } from "./helpers/types";
 
 class Dashboard extends Component {
   state = {
+    books: [],
     currentlyReading: [],
     read: [],
     wantToRead: [],
@@ -28,14 +29,15 @@ class Dashboard extends Component {
     books.forEach((book) => {
       const shelf = book.shelf.toUpperCase();
       if (shelf === shelfTypes.currentlyReading) {
-        currentlyReading.push(book);
+        currentlyReading.push(book.id);
       } else if (shelf === shelfTypes.read) {
-        read.push(book);
+        read.push(book.id);
       } else if (shelf === shelfTypes.wantToRead) {
-        wantToRead.push(book);
+        wantToRead.push(book.id);
       }
     });
     this.setState({
+      books,
       currentlyReading,
       read,
       wantToRead,
@@ -44,27 +46,73 @@ class Dashboard extends Component {
     });
   };
 
+  updateBook = (book) => {
+    BooksAPI.update(book, book.selectedShelf).then((res) => {
+      let updatedBooks = [];
+      const { currentlyReading, wantToRead, read } = res;
+      if (book.selectedShelf.toUpperCase() === shelfTypes.none) {
+        updatedBooks = this.state.books.filter((bk) => bk.id !== book.id);
+      } else {
+        updatedBooks = this.state.books.map((bk) =>
+          bk.id === book.id ? { ...bk, shelf: book.selectedShelf } : bk
+        );
+      }
+      this.setState({
+        books: updatedBooks,
+        currentlyReading,
+        wantToRead,
+        read,
+        totalBooks: updatedBooks.length,
+      });
+    });
+  };
+
   render() {
-    const { currentlyReading, wantToRead, read, isDoneLoading } = this.state;
-    let loading = "loading";
+    const {
+      books,
+      currentlyReading,
+      wantToRead,
+      read,
+      isDoneLoading,
+    } = this.state;
+    let loading = "loading...";
     return (
       <>
         <BookShelf title='Currently Reading'>
           {!isDoneLoading ? (
             loading
           ) : (
-            <WrapBooks books={currentlyReading} shelf='CurrentlyReading' />
+            <WrapBooks
+              books={books}
+              shelfBooks={currentlyReading}
+              shelf='CurrentlyReading'
+              updateBook={this.updateBook}
+            />
           )}
         </BookShelf>
         <BookShelf title='Want to Read'>
           {!isDoneLoading ? (
             loading
           ) : (
-            <WrapBooks books={wantToRead} shelf='WantToRead' />
+            <WrapBooks
+              books={books}
+              shelfBooks={wantToRead}
+              shelf='WantToRead'
+              updateBook={this.updateBook}
+            />
           )}
         </BookShelf>
         <BookShelf title='Read'>
-          {!isDoneLoading ? loading : <WrapBooks books={read} shelf='Read' />}
+          {!isDoneLoading ? (
+            loading
+          ) : (
+            <WrapBooks
+              books={books}
+              shelfBooks={read}
+              shelf='Read'
+              updateBook={this.updateBook}
+            />
+          )}
         </BookShelf>
       </>
     );

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
+
+import SelectBookShelf from "../BookShelf/SelectBookShelf";
 
 /**
  * @description Component that represents a book
@@ -16,27 +18,40 @@ import React from "react";
  *  />
  * )
  */
-const ItemBook = (props) => {
-  const { title, authors, imageUrl } = props;
-  return (
-    <li>
-      <div className='book'>
-        <div className='book-top'>
-          <div
-            className='book-cover'
-            style={{
-              width: 128,
-              height: 193,
-              backgroundImage: `url(${imageUrl})`,
-            }}
-          ></div>
-          {props.children}
+
+class ItemBook extends Component {
+  handleSelectedShelf = (event) => {
+    const selectedShelf = event.target.value;
+    const { bookId: id, shelf } = this.props;
+    if (shelf !== selectedShelf) {
+      this.props.onSelectShelf({ id, selectedShelf, shelf });
+    }
+  };
+  render() {
+    const { title, authors, imageUrl, shelf } = this.props;
+    return (
+      <li>
+        <div className='book'>
+          <div className='book-top'>
+            <div
+              className='book-cover'
+              style={{
+                width: 128,
+                height: 193,
+                backgroundImage: `url(${imageUrl})`,
+              }}
+            ></div>
+            <SelectBookShelf
+              onSelectShelf={this.handleSelectedShelf}
+              shelf={shelf}
+            />
+          </div>
+          <div className='book-title'>{title}</div>
+          <div className='book-authors'>{authors.join(", ")}</div>
         </div>
-        <div className='book-title'>{title}</div>
-        <div className='book-authors'>{authors.join(", ")}</div>
-      </div>
-    </li>
-  );
-};
+      </li>
+    );
+  }
+}
 
 export default ItemBook;

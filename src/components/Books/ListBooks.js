@@ -11,13 +11,18 @@ import ItemBook from "./ItemBook";
  * )
  */
 const ListBooks = (props) => {
-  console.log(props.books);
-  const books = props.books.map((book) => (
+  const shelfBooks = props.books.filter((book) =>
+    props.shelfBooks.includes(book.id)
+  );
+  const books = shelfBooks.map((book) => (
     <ItemBook
       key={book.id}
       title={book.title}
       authors={book.authors}
       imageUrl={book.imageLinks.smallThumbnail}
+      shelf={book.shelf}
+      onSelectShelf={props.updateBook}
+      bookId={book.id}
     />
   ));
   return <ol className='books-grid'>{books}</ol>;
