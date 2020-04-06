@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import BookShelf from "./components/BookShelf/BookShelf";
 import WrapBooks from "./components/Books/WrapBooks";
@@ -77,44 +78,52 @@ class Dashboard extends Component {
     } = this.state;
     let loading = "loading...";
     return (
-      <>
-        <BookShelf title='Currently Reading'>
-          {!isDoneLoading ? (
-            loading
-          ) : (
-            <WrapBooks
-              books={books}
-              shelfBooks={currentlyReading}
-              shelf='CurrentlyReading'
-              updateBook={this.updateBook}
-            />
-          )}
-        </BookShelf>
-        <BookShelf title='Want to Read'>
-          {!isDoneLoading ? (
-            loading
-          ) : (
-            <WrapBooks
-              books={books}
-              shelfBooks={wantToRead}
-              shelf='WantToRead'
-              updateBook={this.updateBook}
-            />
-          )}
-        </BookShelf>
-        <BookShelf title='Read'>
-          {!isDoneLoading ? (
-            loading
-          ) : (
-            <WrapBooks
-              books={books}
-              shelfBooks={read}
-              shelf='Read'
-              updateBook={this.updateBook}
-            />
-          )}
-        </BookShelf>
-      </>
+      <div className='list-books'>
+        <div className='list-books-title'>
+          <h1>MyReads</h1>
+        </div>
+        <div className='list-books-content'>
+          <BookShelf title='Currently Reading'>
+            {!isDoneLoading ? (
+              loading
+            ) : (
+              <WrapBooks
+                books={books}
+                shelfBooks={currentlyReading}
+                shelf='CurrentlyReading'
+                updateBook={this.updateBook}
+              />
+            )}
+          </BookShelf>
+          <BookShelf title='Want to Read'>
+            {!isDoneLoading ? (
+              loading
+            ) : (
+              <WrapBooks
+                books={books}
+                shelfBooks={wantToRead}
+                shelf='WantToRead'
+                updateBook={this.updateBook}
+              />
+            )}
+          </BookShelf>
+          <BookShelf title='Read'>
+            {!isDoneLoading ? (
+              loading
+            ) : (
+              <WrapBooks
+                books={books}
+                shelfBooks={read}
+                shelf='Read'
+                updateBook={this.updateBook}
+              />
+            )}
+          </BookShelf>
+        </div>
+        <div className='open-search'>
+          <Link to='/search'>Add a book</Link>
+        </div>
+      </div>
     );
   }
 }
