@@ -1,17 +1,22 @@
 import React from "react";
-// import * as BooksAPI from './BooksAPI'
+import { Route, Switch } from "react-router-dom";
+
 import "./App.css";
 import Layout from "./Layout";
 import Dashboard from "./Dashboard";
+import SearchBook from "./SearchBook";
 
-class BooksApp extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <Layout>
-        <Dashboard />
+        <Switch>
+          <Route path='/search' component={SearchBook} />
+          <Route exact path='/' component={Dashboard} />
+        </Switch>
       </Layout>
     );
   }
 }
 
-export default BooksApp;
+export default App;

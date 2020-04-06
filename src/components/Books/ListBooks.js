@@ -11,10 +11,11 @@ import ItemBook from "./ItemBook";
  * )
  */
 const ListBooks = (props) => {
-  const shelfBooks = props.books.filter((book) =>
-    props.shelfBooks.includes(book.id)
-  );
-  const books = shelfBooks.map((book) => (
+  let { books, shelfBooks } = props;
+  if (shelfBooks) {
+    books = books.filter((book) => props.shelfBooks.includes(book.id));
+  }
+  const AvailableBooks = books.map((book) => (
     <ItemBook
       key={book.id}
       title={book.title}
@@ -25,7 +26,7 @@ const ListBooks = (props) => {
       bookId={book.id}
     />
   ));
-  return <ol className='books-grid'>{books}</ol>;
+  return <ol className='books-grid'>{AvailableBooks}</ol>;
 };
 
 export default ListBooks;
